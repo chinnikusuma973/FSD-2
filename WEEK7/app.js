@@ -1,65 +1,36 @@
 const express = require("express");
 
 const app = express();
+const PORT = 3000;
 
-// Set EJS as template engine
 app.set("view engine", "ejs");
 
-// To read form data
 app.use(express.urlencoded({ extended: true }));
 
-// Home route
 app.get("/", (req, res) => {
-    res.render("index", {
-        name: "Kusuma",
-        course: "Artificial Intelligence and Machine Learning",
-        college: "SVECW"
-    });
+    res.render("index");
 });
 
-// Form page
-app.get("/form", (req, res) => {
-    res.render("form", {
-        error: "",
-        name: "",
-        email: "",
-        age: ""
-    });
-});
+app.post("/register", (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const age = Number(req.body.age);
 
-// Form submission
-app.post("/submit", (req, res) => {
-
-    const { name, email, age } = req.body;
-
-    // Validation
     if (!name || !email || !age) {
-        return res.render("form", {
-            error: "All fields are required!",
-            name: name,
-            email: email,
-            age: age
-        });
+        return res.send("All fields are required");
     }
 
     if (age < 18) {
-        return res.render("form", {
-            error: "Age must be 18 or above!",
-            name: name,
-            email: email,
-            age: age
-        });
+        return res.send("Age must be 18 or above");
     }
 
-    res.send(`
-        <h1>Registration Successful</h1>
-        <p>Name: ${name}</p>
-        <p>Email: ${email}</p>
-        <p>Age: ${age}</p>
-    `);
+    res.render("result", {
+        name: name,
+        email: email,
+        age: age
+    });
 });
 
-// Start server
-app.listen(3000, () => {
-    console.log("Server running at http://localhost:3000");
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
 });
