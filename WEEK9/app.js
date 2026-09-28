@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 
@@ -10,9 +11,7 @@ const port = 3000;
 app.use(express.json());
 
 // MongoDB connection
-const mongoURI = "mongodb+srv://chinnikusuma973_db_user:h4ZgyrE8nuhZNdZH@cluster0.fwz2iek.mongodb.net/?appName=Cluster0";
-
-mongoose.connect(mongoURI)
+mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log("MongoDB connected successfully");
     })
